@@ -1,0 +1,49 @@
+group 'com.tech.selenium'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+ext {
+    serenity_version = "1.9.19"
+    junit_version = "4.12"
+    webdrivermanager_version = '2.2.1'
+}
+
+buildscript {
+    ext {
+        serenity_version = "1.9.19"
+    }
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:${serenity_version}")
+    }
+}
+
+apply plugin: "java"
+apply plugin: "net.serenity-bdd.aggregator"
+
+sourceCompatibility = 1.8
+
+dependencies {
+    compile "net.serenity-bdd:serenity-core:${serenity_version}"
+    compile "net.serenity-bdd:serenity-junit:${serenity_version}"
+    compile "io.github.bonigarcia:webdrivermanager:${webdrivermanager_version}"
+    testCompile "junit:junit:${junit_version}"
+}
+
+test {
+    testLogging {
+        showStandardStreams = true
+    }
+    /* Pass all system properties: */
+    systemProperties System.getProperties()
+    dependsOn 'cleanTest'
+}
+
+gradle.startParameter.continueOnFailure = true
